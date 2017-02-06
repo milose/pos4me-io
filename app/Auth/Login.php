@@ -16,7 +16,7 @@ class Login
             
             if ($users->count() > 0)
             {
-                return $users->first()->token;
+                return $users->first()->password;
             }
         }
         
@@ -33,7 +33,7 @@ class Login
             
             if ($users->count() > 0)
             {
-                return $users->first()->token;
+                return $users->first()->password;
             }
         }
         

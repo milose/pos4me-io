@@ -29,6 +29,6 @@ class Operater extends Model
     public function scopeWithToken($query, $token)
     {
         return $query->isActive()
-                        ->where('token', $token);
+                        ->whereRaw("CONVERT(VARCHAR(MAX), password, 2) = '{$token}'");
     }
 }
