@@ -21,11 +21,7 @@ Route::group(['middleware' => 'token'], function () {
     /*
         Informacije o operateru
      */
-    Route::get('operater', function () {
-        $data = Operater::withToken(request()->headers->get('Api-Token'));
-
-        return response()->json($data->first(), 200);
-    });
+    Route::get('operater', 'OperaterController@show');
 
     /*
         Informacije o dokumentima
@@ -120,6 +116,9 @@ Route::group(['middleware' => 'token'], function () {
         return response()->json(compact('stavke'), 200);
     });
 
+    /*
+        Promijeni kolicine za stavke
+     */
     Route::post('dokument/{dokument}/stavke', function (Dokument $dokument) {
         collect(request()->data)->each(function ($stavka) use ($dokument) {
             $dokument->stavke->find($stavka['id_dnevnik'])->update($stavka);
@@ -134,9 +133,7 @@ Route::group(['middleware' => 'token'], function () {
     // @TODO: fix this shit
     Route::get('dokument/{dokument}/status/{set}', function (Dokument $dokument, $set) {
         $status = $dokument->status()->kontrola()->first();
-
         $status->vrsta = $set;
-
         App\DokumentStatus::kontrola()->where('id_dokument', 5)->update(['vrsta' => $status->vrsta]);
 
         return;
@@ -146,20 +143,3 @@ Route::group(['middleware' => 'token'], function () {
         Stavke
      */
 });
-
-/*
- * Helpers
- */
-function ucitajPoVrsti($vrsta)
-{
-    return DokumentStatus::where('vrsta', 'PDA-S')
-                            ->orWhere('vrsta', 'PDA-D')
-                            ->with(['dokument' => function ($query) use ($vrsta) {
-                                $query->whereIn('id_vrsta', $vrsta->pluck('id_vrsta'));
-                            }])
-                            ->get()
-                            ->filter(function ($item) {
-                                // samo gdje ima dokument
-                                return !is_null($item->dokument);
-                            });
-}
