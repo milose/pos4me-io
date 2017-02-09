@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Exceptions;
+namespace app\Exceptions;
 
 use Exception;
 
 class UnauthorizedException extends Exception
 {
-    
 }

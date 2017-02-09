@@ -52,7 +52,7 @@ return [
             'strict' => true,
             'engine' => null,
         ],
-        
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'host' => env('DB_HOST', 'localhost'),
