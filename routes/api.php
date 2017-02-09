@@ -32,10 +32,10 @@ Route::group(['middleware' => 'token'], function () {
      */
     Route::get('dokument/spisak', function () {
         $ulazVrste = DokumentVrsta::byName('RMUL')->get();
-        $ulaz = loadType($ulazVrste);
+        $ulaz = ucitajPoVrsti($ulazVrste);
         
         $izlazVrste = DokumentVrsta::byName('RMIZ')->get();
-        $izlaz = loadType($izlazVrste);
+        $izlaz = ucitajPoVrsti($izlazVrste);
         
         $vrste = [
             [
@@ -147,7 +147,7 @@ Route::group(['middleware' => 'token'], function () {
 /*
  * Helpers
  */
-function loadType($vrsta) {
+function ucitajPoVrsti($vrsta) {
     return DokumentStatus::where('vrsta', 'PDA-S')
                             ->orWhere('vrsta', 'PDA-D')
                             ->with(['dokument' => function ($query) use ($vrsta) {
@@ -158,11 +158,4 @@ function loadType($vrsta) {
                                 // samo gdje ima dokument
                                 return !is_null($item->dokument);
                             });
-}
-function var_dump_ret($mixed = null) {
-  ob_start();
-  var_dump($mixed);
-  $content = ob_get_contents();
-  ob_end_clean();
-  return $content;
 }
