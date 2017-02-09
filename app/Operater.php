@@ -8,6 +8,11 @@ class Operater extends Model
 {
     protected $table = 'operater';
     
+    protected $primaryKey = 'username';
+    
+    public $timestamps = false;
+    public $incrementing = false;
+    
     public function scopeIsActive($query)
     {
         return $query->where('is_active', 1);

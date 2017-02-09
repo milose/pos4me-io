@@ -10,6 +10,8 @@ class DokumentVrsta extends Model
     
     protected $primaryKey = 'id_vrsta';
     
+    public $timestamps = false;
+    
     public function dokumenti()
     {
         return $this->hasMany('App\Dokument', 'id_vrsta');

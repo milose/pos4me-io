@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class DokumentStavkaOsobina extends Model
 {
     protected $table = 'artikal_dnevnik_osobina';
+    
+    public $incrementing = false;
+    public $timestamps = false;
 
     public function stavka()
     {

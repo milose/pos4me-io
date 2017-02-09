@@ -10,9 +10,14 @@ class Dokument extends Model
     
     protected $primaryKey = 'id_dokument';
     
+    public $timestamps = false;
+        
+    // const CREATED_AT = 'created';
+    // const UPDATED_AT = 'updated';
+    
     public function getSAttribute()
     {
-        return $this->status->vrijednost;
+        return $this->status->vrsta;
     }
     
     public function scopeVrste($query, $vrsta)
@@ -23,6 +28,11 @@ class Dokument extends Model
     public function scopeByEan($query, $ean)
     {
         return $query->where('id_dokument', $ean);
+    }
+    
+    public function scopeByVrsta($query, $vrsta)
+    {
+        $query->with('vrsta')->where('skraceni', $vrsta);
     }
     
     public function status()
@@ -37,7 +47,7 @@ class Dokument extends Model
     
     public function vrsta()
     {
-        return $this->belongsTo('App\DokumentVrsta', 'id_dokument');
+        return $this->belongsTo('App\DokumentVrsta', 'id_vrsta');
     }
     
     public function veza()

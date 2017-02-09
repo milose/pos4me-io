@@ -27,8 +27,6 @@ class VerifyTokenHeader
             throw new UnauthorizedException('No active user with provided token.');
         }
         
-        $request->operater = $users->first();
-        
         return $next($request);        
     }
 }
