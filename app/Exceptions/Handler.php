@@ -43,15 +43,15 @@ class Handler extends ExceptionHandler
      *
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Exception $e)
     {
-        if ($exception instanceof UnauthorizedException) {
+        if ($e instanceof UnauthorizedException) {
             return response()->json([
-                'message' => $exception->getMessage(),
-            ], 401);
+                'message' => $e->getMessage(),
+            ], $e->getCode());
         }
 
-        return parent::render($request, $exception);
+        return parent::render($request, $e);
     }
 
     /**

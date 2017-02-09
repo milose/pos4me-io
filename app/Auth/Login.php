@@ -19,7 +19,7 @@ class Login
             }
         }
 
-        throw new UnauthorizedException('User not found.');
+        throw new UnauthorizedException('User not found.', 401);
     }
 
     public static function basic()
@@ -34,7 +34,10 @@ class Login
                 return $users->first()->password;
             }
         }
+        else {
+            throw new UnauthorizedException('Malformed query.', 400);
+        }
 
-        throw new UnauthorizedException('User not found.');
+        throw new UnauthorizedException('User not found.', 401);
     }
 }

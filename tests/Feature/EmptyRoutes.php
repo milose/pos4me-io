@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class EmptyRoutes extends TestCase
 {
-    public $token;
+    public $token = 'CC03E747A6AFBBCBF8BE7668ACFEBEE5';
     /**
      * A basic test example.
      *
@@ -27,7 +27,7 @@ class EmptyRoutes extends TestCase
     public function testRoutesLogin()
     {
         $response = $this->post('/api/login/basic');
-        $response->assertStatus(401);
+        $response->assertStatus(400);
         
         $response = $this->post('/api/login/ean');
         $response->assertStatus(401);
@@ -37,7 +37,13 @@ class EmptyRoutes extends TestCase
     {
         $response = $this->post('/api/login/basic', [
             'user' => 'test',
-            'password' => 'test123'
+            'pass' => 'test'
+        ]);
+        $response->assertStatus(401);
+        
+        $response = $this->post('/api/login/basic', [
+            'user' => 'test',
+            'pass' => 'test123'
         ]);
         $response->assertStatus(200);
         
