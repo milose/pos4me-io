@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Operater;
 use Illuminate\Http\Request;
 
 class OperaterController extends Controller

@@ -18,6 +18,10 @@ class Login
                 return $users->first()->password;
             }
         }
+        else {
+            throw new UnauthorizedException('Malformed query.', 400);
+            return;
+        }
 
         throw new UnauthorizedException('User not found.', 401);
     }
@@ -36,6 +40,7 @@ class Login
         }
         else {
             throw new UnauthorizedException('Malformed query.', 400);
+            return;
         }
 
         throw new UnauthorizedException('User not found.', 401);
