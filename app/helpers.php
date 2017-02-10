@@ -1,5 +1,6 @@
 <?php
 
+use App\DokumentStatus;
 /*
  * Helpers
  */

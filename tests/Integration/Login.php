@@ -7,25 +7,14 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class EmptyRoutes extends TestCase
+class Login extends TestCase
 {
-    private $token = 'CC03E747A6AFBBCBF8BE7668ACFEBEE5';
+    private $header = [
+        'Api-Token' => 'CC03E747A6AFBBCBF8BE7668ACFEBEE5'
+    ];
     
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testRoutes()
-    {
-        $response = $this->get('/');
-        $response->assertStatus(404);
-        
-        $response = $this->get('/api');
-        $response->assertStatus(404);
-    }
-    
-    public function testRoutesWork()
+    /** @test */
+    public function login_routes_work()
     {
         $response = $this->post('/api/login/basic');
         $response->assertStatus(400);
@@ -34,7 +23,8 @@ class EmptyRoutes extends TestCase
         $response->assertStatus(400);
     }
     
-    public function testLoginFails()
+    /** @test */
+    public function login_fails()
     {
         $response = $this->post('/api/login/basic', [
             'user' => 'test',
@@ -48,7 +38,8 @@ class EmptyRoutes extends TestCase
         $response->assertStatus(401);
     }
     
-    public function testLoginWorks()
+    /** @test */
+    public function login_works()
     {
         $response = $this->post('/api/login/basic', [
             'user' => 'test',
@@ -62,11 +53,12 @@ class EmptyRoutes extends TestCase
         $response->assertStatus(200);    
     }
     
-    public function testOperaterQuery()
+    public function testDokumentStavke()
     {
-        $response = $this->get('/api/operater', [
-            'Api-Token' => $this->token
-        ]);
+        $response = $this->get('/api/dokument/5/stavke', $this->header);
+        
         $response->assertStatus(200);
+        
+        $this->assertArrayHasKey('stavke', json_decode($response->content(), true));
     }
 }

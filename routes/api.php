@@ -32,23 +32,30 @@ Route::group(['middleware' => 'token'], function () {
 
         $izlazVrste = DokumentVrsta::byName('RMIZ')->get();
         $izlaz = ucitajPoVrsti($izlazVrste);
-
-        $vrste = [
-            [
-                'id' => $ulazVrste->first()->id_vrsta,
-                'skraceni' => $ulazVrste->first()->skraceni,
-                'naziv' => $ulazVrste->first()->naziv,
-                'opis' => $ulazVrste->first()->opis,
-                'count' => $ulaz->count(),
-            ],
-            [
-                'id' => $izlazVrste->first()->id_vrsta,
-                'skraceni' => $izlazVrste->first()->skraceni,
-                'naziv' => $izlazVrste->first()->naziv,
-                'opis' => $izlazVrste->first()->opis,
-                'count' => $izlaz->count(),
-            ],
-        ];
+        
+        $vrste = array();
+        
+        if ($ulazVrste->count() > 0) {
+            $vrste[] = 
+                [
+                    'id' => $ulazVrste->first()->id_vrsta,
+                    'skraceni' => $ulazVrste->first()->skraceni,
+                    'naziv' => $ulazVrste->first()->naziv,
+                    'opis' => $ulazVrste->first()->opis,
+                    'count' => $ulaz->count(),
+                ];
+        }
+        
+        if ($izlazVrste->count() > 0) {
+            $vrste[] = 
+                [
+                    'id' => $izlazVrste->first()->id_vrsta,
+                    'skraceni' => $izlazVrste->first()->skraceni,
+                    'naziv' => $izlazVrste->first()->naziv,
+                    'opis' => $izlazVrste->first()->opis,
+                    'count' => $izlaz->count(),
+                ];
+        }
 
         return response()->json(compact('vrste'), 200);
     });
@@ -56,13 +63,27 @@ Route::group(['middleware' => 'token'], function () {
     /*
         Listaj dokumenta po vrsti
      */
-    Route::get('dokument/vrsta/{vrsta}', function (DokumentVrsta $vrsta) {
-        $dokumenti = Dokument::with('status')
-                        ->where('id_vrsta', $vrsta->id_vrsta)
+    Route::get('dokument/vrsta/{id}', function ($id) {
+        $vrsta = DokumentVrsta::find($id);
+        
+        if (!$vrsta) {
+            return response()->json(['dokumenti' => []], 200);
+        }
+        
+        $dokumenti = DokumentVrsta::find($vrsta->id_vrsta)
+                        ->dokumenti()
+                        ->with([
+                            'status' => function ($query) {
+                                $query->whereIn('vrsta', [
+                                    'PDA-S',
+                                    'PDA-D'
+                                ]);
+                            }
+                        ])
                         ->get()
-                        ->whereIn('status.vrsta', ['PDA-S', 'PDA-D'])
+                        ->filter->status
                         ->flatten();
-
+        
         return response()->json(compact('dokumenti'), 200);
     });
 
@@ -70,32 +91,44 @@ Route::group(['middleware' => 'token'], function () {
         Nađi dokument po ean
      */
     Route::get('dokument/find/{ean}', function ($ean) {
-        return Dokument::byEan($ean)->first();
+        $dokument = Dokument::byEan($ean)->first();
+        return response()->json(compact('dokument'), 200);
     });
 
     /*
         Dokument
      */
-    Route::get('dokument/{dokument}', function (Dokument $dokument) {
-        $dokument = Dokument::with('status')->find($dokument->id_dokument);
-
-        return response()->json($dokument, 200);
+    Route::get('dokument/{id}', function ($id) {
+        $dokument = Dokument::with('status')->find($id);
+        return response()->json(compact('dokument'), 200);
     });
 
     /*
         Dokument veze
      */
-    Route::get('dokument/{dokument}/vezani', function (Dokument $dokument) {
+    Route::get('dokument/{id}/vezani', function ($id) {
+        $dokument = Dokument::with('status')->find($id);
+        
+        if (!$dokument) {
+            return response()->json(['dokument' => []], 200);
+        }
+        
         $dokument = Dokument::with('status')->find($dokument->veza->vezani->id_dokument);
 
-        return response()->json($dokument, 200);
+        return response()->json(compact('dokument'), 200);
     });
 
     /*
         Listaj stavke za dokument
      */
     // @TODO: Refactor, makni filter u komentarima i if u each
-    Route::get('dokument/{dokument}/stavke', function (Dokument $dokument) {
+    Route::get('dokument/{id}/stavke', function ($id) {
+        $dokument = Dokument::with('status')->find($id);
+        
+        if (!$dokument) {
+            return response()->json(['stavke' => []], 200);
+        }
+        
         $stavke = $dokument->stavke()
                             ->with('osobine', 'artikal.eans')->get()
                             ->each(function ($stavka) {
@@ -138,8 +171,4 @@ Route::group(['middleware' => 'token'], function () {
 
         return;
     });
-
-    /*
-        Stavke
-     */
 });
