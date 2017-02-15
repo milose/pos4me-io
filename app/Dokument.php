@@ -54,4 +54,9 @@ class Dokument extends Model
     {
         return $this->hasOne('App\DokumentVeza', 'id_dokument');
     }
+    
+    public function partner()
+    {
+        return $this->belongsTo('App\Partner', 'id_partner');
+    }
 }
