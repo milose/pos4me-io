@@ -19,6 +19,6 @@ class DokumentVrsta extends Model
 
     public function scopeByName($query, $skraceni)
     {
-        $query->where('skraceni', $skraceni);
+        $query->whereIn('skraceni', json_decode($skraceni));
     }
 }

@@ -9,29 +9,12 @@ class DokumentStatus extends Model
     protected $table = 'artikal_dokument_status';
 
     protected $primaryKey = 'id_dokument';
+    
+    protected $fillable = ['vrsta'];
 
     public $incrementing = false;
     public $timestamps = false;
-
-    public function setVrstaAttribute($set)
-    {
-        $vrsta = '';
-
-        switch ($set) {
-            case 'lock':
-                $vrsta = 'PDA-P';
-                break;
-            case 'unlock':
-                $vrsta = 'PDA-D';
-                break;
-            case 'done':
-                $vrsta = 'PDA-Z';
-                break;
-        }
-
-        $this->attributes['vrsta'] = $vrsta;
-    }
-
+    
     public function scopeByStatus($query, array $statusi)
     {
         $query->whereIn('vrsta', $statusi);
