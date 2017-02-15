@@ -83,6 +83,7 @@ Route::group(['middleware' => 'token'], function () {
         
         $dokumenti = DokumentVrsta::find($vrsta->id_vrsta)
                         ->dokumenti()
+                        ->with('partner')
                         ->with([
                             'status' => function ($query) {
                                 $query->whereIn('vrsta', [
@@ -107,7 +108,7 @@ Route::group(['middleware' => 'token'], function () {
         Dokument
      */
     Route::get('dokument/{id}', function ($id) {
-        $dokument = Dokument::with('status')->find($id);
+        $dokument = Dokument::with('status', 'partner')->find($id);
         
         if (!$dokument) {
             return response()->json(['dokument' => []], 200);
@@ -133,7 +134,7 @@ Route::group(['middleware' => 'token'], function () {
             return response()->json(['dokument' => []], 200);
         }
         
-        $dokument = Dokument::with('status')->find($dokument->veza->vezani->id_dokument);
+        $dokument = Dokument::with('status', 'partner')->find($dokument->veza->vezani->id_dokument);
         
         if (!$dokument) {
             return response()->json(['dokument' => []], 200);
