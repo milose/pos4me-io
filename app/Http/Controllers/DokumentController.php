@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Operater;
+use App\Dokument;
+use App\Auth\Login;
+use App\DokumentVrsta;
+use App\DokumentStatus;
 use Illuminate\Http\Request;
 
 class DokumentController extends Controller
