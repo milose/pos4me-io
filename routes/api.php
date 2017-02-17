@@ -19,6 +19,6 @@ Route::group(['middleware' => 'token'], function () {
     Route::get('dokument/{id}', 'DokumentController@show');
     Route::get('dokument/{id}/vezani', 'DokumentController@showVezani');
     Route::get('dokument/{id}/stavke', 'DokumentController@showStavke');
+    Route::get('dokument/{id}/status/{set}', 'DokumentController@updateStatus');
     Route::post('dokument/{dokument}/stavke', 'DokumentController@updateStavke');
-    Route::post('dokument/{id}/status/{set}', 'DokumentController@updateStatus');
 });
