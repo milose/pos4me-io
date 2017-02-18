@@ -98,7 +98,7 @@ class DokumentController extends Controller
         $dokument = Dokument::with('status', 'partner')->find($id);
         
         if (!$dokument) {
-            return response()->json(['dokument' => []], 200);
+            return response()->json(null, 404);
         }
         
         $ulaz = json_decode(env('DOC_ULAZ'));
@@ -118,8 +118,8 @@ class DokumentController extends Controller
     {
         $dokument = Dokument::with('status')->find($id);
         
-        if (!$dokument) {
-            return response()->json(['dokument' => []], 200);
+        if (!$dokument || !$dokument->veza) {
+            return response()->json(null, 404);
         }
         
         $dokument = Dokument::with('status', 'partner')->find($dokument->veza->vezani->id_dokument);
