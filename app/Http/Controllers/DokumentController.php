@@ -195,7 +195,7 @@ class DokumentController extends Controller
         
         DokumentStatus::pda()
                         ->where('id_dokument', $id)
-                        ->update(['vrsta' => $vrijednost]);
+                        ->update(['vrijednost' => $vrijednost]);
 
         return response('', 200);
     }
