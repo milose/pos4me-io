@@ -13,12 +13,8 @@ class DokumentStatus extends Model
     protected $fillable = ['vrsta'];
 
     public $incrementing = false;
-    public $timestamps = false;
     
-    // public function scopeByStatus($query, array $statusi)
-    // {
-    //     $query->pda->whereIn('vrijednost', $statusi);
-    // }
+    public $timestamps = false;
 
     public function scopePda($query)
     {
