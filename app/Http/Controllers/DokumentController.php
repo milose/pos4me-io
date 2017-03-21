@@ -72,10 +72,7 @@ class DokumentController extends Controller
                         ->with('partner')
                         ->with([
                             'status' => function ($query) {
-                                $query->whereIn('vrsta', [
-                                    'PDA-S',
-                                    'PDA-D'
-                                ]);
+                                $query->pda()->whereIn('vrijednost', ['S', 'D']);
                             }
                         ])
                         ->get()
@@ -182,23 +179,23 @@ class DokumentController extends Controller
      */
     public function updateStatus($id, $set)
     {
-        $vrsta = '';
+        $vrijednost = '';
 
         switch ($set) {
             case 'lock':
-                $vrsta = 'PDA-P';
+                $vrijednost = 'P';
                 break;
             case 'unlock':
-                $vrsta = 'PDA-D';
+                $vrijednost = 'D';
                 break;
             case 'done':
-                $vrsta = 'PDA-Z';
+                $vrijednost = 'Z';
                 break;
         }
         
-        DokumentStatus::kontrola()
+        DokumentStatus::pda()
                         ->where('id_dokument', $id)
-                        ->update(['vrsta' => $vrsta]);
+                        ->update(['vrsta' => $vrijednost]);
 
         return response('', 200);
     }

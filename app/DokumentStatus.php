@@ -15,14 +15,14 @@ class DokumentStatus extends Model
     public $incrementing = false;
     public $timestamps = false;
     
-    public function scopeByStatus($query, array $statusi)
-    {
-        $query->whereIn('vrsta', $statusi);
-    }
+    // public function scopeByStatus($query, array $statusi)
+    // {
+    //     $query->pda->whereIn('vrijednost', $statusi);
+    // }
 
-    public function scopeKontrola($query)
+    public function scopePda($query)
     {
-        $query->where('vrijednost', 'kontrola');
+        $query->where('vrsta', 'PDA');
     }
 
     public function dokument()

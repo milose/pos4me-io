@@ -6,8 +6,8 @@ use App\DokumentStatus;
  */
 function ucitajPoVrsti($vrsta)
 {
-    return DokumentStatus::where('vrsta', 'PDA-S')
-                            ->orWhere('vrsta', 'PDA-D')
+    return DokumentStatus::pda()
+                            ->whereIn('vrijednost', ['S', 'D'])
                             ->with(['dokument' => function ($query) use ($vrsta) {
                                 $query->whereIn('id_vrsta', $vrsta->pluck('id_vrsta'));
                             }])
