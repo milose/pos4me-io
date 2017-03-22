@@ -3,6 +3,7 @@
 namespace app\Auth;
 
 use App\Operater;
+use App\OperaterIdent;
 use App\Exceptions\UnauthorizedException;
 
 class Login
@@ -12,13 +13,14 @@ class Login
         $ean = request('ean');
 
         if ($ean) {
-            $users = Operater::authByEan($ean);
-
-            if ($users->count() > 0) {
-                return $users->first()->password;
+            $ident = OperaterIdent::find($ean);
+            
+            if ($ident) {                
+                if ($ident->operater) {
+                    return $ident->operater->password;
+                }
             }
-        }
-        else {
+        } else {
             throw new UnauthorizedException('Malformed query.', 400);
             return;
         }
@@ -37,8 +39,7 @@ class Login
             if ($users->count() > 0) {
                 return $users->first()->password;
             }
-        }
-        else {
+        } else {
             throw new UnauthorizedException('Malformed query.', 400);
             return;
         }

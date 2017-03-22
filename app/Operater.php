@@ -2,6 +2,7 @@
 
 namespace app;
 
+use OperaterIdent;
 use Illuminate\Database\Eloquent\Model;
 
 class Operater extends Model
@@ -11,19 +12,14 @@ class Operater extends Model
     protected $primaryKey = 'username';
 
     public $timestamps = false;
+    
     public $incrementing = false;
 
     public function scopeIsActive($query)
     {
         return $query->where('is_active', 1);
     }
-
-    public function scopeAuthByEan($query, $ean)
-    {
-        return $query->isActive()
-                        ->where('ean', $ean);
-    }
-
+    
     public function scopeAuthBasic($query, $username, $password)
     {
         return $query->isActive()
@@ -35,5 +31,10 @@ class Operater extends Model
     {
         return $query->isActive()
                         ->whereRaw("CONVERT(VARCHAR(MAX), password, 2) = '{$token}'");
+    }
+
+    public function kljucevi()
+    {
+        return $this->hasMany('App\OperaterIdent', 'username', 'username');
     }
 }
