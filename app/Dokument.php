@@ -52,7 +52,7 @@ class Dokument extends Model
 
     public function veza()
     {
-        return $this->hasOne('App\DokumentVeza', 'id_dokument');
+        return $this->hasOne('App\DokumentVeza', 'id_connected');
     }
     
     public function partner()

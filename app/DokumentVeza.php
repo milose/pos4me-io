@@ -13,11 +13,11 @@ class DokumentVeza extends Model
 
     public function original()
     {
-        return $this->belongsTo('App\Dokument', 'id_dokument', 'id_dokument');
+        return $this->belongsTo('App\Dokument', 'id_dokument', 'id_connected');
     }
 
     public function vezani()
     {
-        return $this->hasOne('App\Dokument', 'id_dokument', 'id_connected');
+        return $this->hasOne('App\Dokument', 'id_dokument', 'id_dokument');
     }
 }
