@@ -9,6 +9,10 @@ Route::post('/login/ean', 'LoginController@ean');
 
 Route::get('dokument/format', 'DokumentController@format');
 
+Route::get('test', function() {
+    return DB::table('korisnik')->value('naziv');
+});
+
 /*
     API
  */
