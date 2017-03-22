@@ -10,6 +10,8 @@ class OperaterController extends Controller
     public function show()
     {
         $data = Operater::withToken(request()->headers->get('Api-Token'));
-        return response()->json($data->first(), 200);
+        $operater = $data->first();
+        $operater->password = '';
+        return response()->json($operater, 200);
     }
 }
