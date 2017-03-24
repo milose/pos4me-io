@@ -17,7 +17,7 @@ class Login
             
             if ($ident) {                
                 if ($ident->operater) {
-                    return strtoupper(bin2hex($ident->operater->password));
+                    return strtoupper(($ident->operater->password));
                 }
             }
         } else {
@@ -37,7 +37,7 @@ class Login
             $users = Operater::authBasic($user, $pass);
 
             if ($users->count() > 0) {
-                return strtoupper(bin2hex($users->first()->password));
+                return strtoupper(($users->first()->password));
             }
         } else {
             throw new UnauthorizedException('Malformed query.', 400);
