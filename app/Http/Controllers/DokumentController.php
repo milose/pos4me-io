@@ -28,13 +28,18 @@ class DokumentController extends Controller
         
         if ($ulazVrste->count() > 0) {
             foreach ($ulazVrste as $vrsta) {
+                
+                $count = $ulaz->filter(function($item, $key) use ($vrsta) {
+                    return $item->dokument->id_vrsta == $vrsta->id_vrsta;
+                })->count();
+                
                 $vrste[] = 
                     [
                         'id' => $vrsta->id_vrsta,
                         'skraceni' => $vrsta->skraceni,
                         'naziv' => $vrsta->naziv,
                         'opis' => $vrsta->opis,
-                        'count' => 99,
+                        'count' => $count,
                         'vrsta' => 'U',
                     ];
             }
@@ -42,13 +47,18 @@ class DokumentController extends Controller
         
         if ($izlazVrste->count() > 0) {
             foreach ($izlazVrste as $vrsta) {
+                
+                $count = $izlaz->filter(function($item, $key) use ($vrsta) {
+                    return $item->dokument->id_vrsta == $vrsta->id_vrsta;
+                })->count();
+                
                 $vrste[] = 
                     [
                         'id' => $vrsta->id_vrsta,
                         'skraceni' => $vrsta->skraceni,
                         'naziv' => $vrsta->naziv,
                         'opis' => $vrsta->opis,
-                        'count' => 99,
+                        'count' => $count,
                         'vrsta' => 'I',
                     ];
             }
