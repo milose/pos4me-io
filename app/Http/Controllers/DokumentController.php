@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use App\Operater;
 use App\Dokument;
+use Carbon\Carbon;
 use App\Auth\Login;
 use App\DokumentVrsta;
 use App\DokumentStatus;
@@ -212,6 +213,14 @@ class DokumentController extends Controller
                 $vrijednost = 'Z';
                 break;
         }
+        
+        $data = Operater::withToken(request()->headers->get('Api-Token'));
+        $operater = $data->first();
+        
+        $doc = Dokument::find($id)->veza->vezani;
+        $doc->updated = Carbon::now();
+        $doc->op_update = $operater->username;
+        $doc->save();
         
         DokumentStatus::pda()
                         ->where('id_dokument', $id)
