@@ -25,7 +25,7 @@ class VerifyTokenHeader
         $users = Operater::withToken($request->headers->get('Api-Token'));
 
         if ($users->count() == 0) {
-            throw new UnauthorizedException('No active user with provided token.', 401);
+            throw new UnauthorizedException('No active user with provided token: ' . $request->headers->get('Api-Token'), 401);
         }
 
         return $next($request);

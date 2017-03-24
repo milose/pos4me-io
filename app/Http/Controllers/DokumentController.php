@@ -27,27 +27,31 @@ class DokumentController extends Controller
         $vrste = array();
         
         if ($ulazVrste->count() > 0) {
-            $vrste[] = 
-                [
-                    'id' => $ulazVrste->first()->id_vrsta,
-                    'skraceni' => $ulazVrste->first()->skraceni,
-                    'naziv' => $ulazVrste->first()->naziv,
-                    'opis' => $ulazVrste->first()->opis,
-                    'count' => $ulaz->count(),
-                    'vrsta' => 'U',
-                ];
+            foreach ($ulazVrste as $vrsta) {
+                $vrste[] = 
+                    [
+                        'id' => $vrsta->id_vrsta,
+                        'skraceni' => $vrsta->skraceni,
+                        'naziv' => $vrsta->naziv,
+                        'opis' => $vrsta->opis,
+                        'count' => 99,
+                        'vrsta' => 'U',
+                    ];
+            }
         }
         
         if ($izlazVrste->count() > 0) {
-            $vrste[] = 
-                [
-                    'id' => $izlazVrste->first()->id_vrsta,
-                    'skraceni' => $izlazVrste->first()->skraceni,
-                    'naziv' => $izlazVrste->first()->naziv,
-                    'opis' => $izlazVrste->first()->opis,
-                    'count' => $izlaz->count(),
-                    'vrsta' => 'I',
-                ];
+            foreach ($izlazVrste as $vrsta) {
+                $vrste[] = 
+                    [
+                        'id' => $vrsta->id_vrsta,
+                        'skraceni' => $vrsta->skraceni,
+                        'naziv' => $vrsta->naziv,
+                        'opis' => $vrsta->opis,
+                        'count' => 99,
+                        'vrsta' => 'I',
+                    ];
+            }
         }
 
         return response()->json(compact('vrste'), 200);
