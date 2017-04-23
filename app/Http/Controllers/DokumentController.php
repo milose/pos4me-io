@@ -34,6 +34,10 @@ class DokumentController extends Controller
                     return $item->dokument->id_vrsta == $vrsta->id_vrsta;
                 })->count();
                 
+                if ($count <= 0) {
+                    continue;
+                }
+                
                 $vrste[] = 
                     [
                         'id' => $vrsta->id_vrsta,
@@ -53,6 +57,10 @@ class DokumentController extends Controller
                     return $item->dokument->id_vrsta == $vrsta->id_vrsta;
                 })->count();
                 
+                if ($count <= 0) {
+                    continue;
+                }
+                
                 $vrste[] = 
                     [
                         'id' => $vrsta->id_vrsta,
@@ -64,12 +72,6 @@ class DokumentController extends Controller
                     ];
             }
         }
-        
-        $vrste = collect($vrste);
-        
-        $vrste = $vrste->filter(function ($item) {
-            return $item['count'] > 0;
-        });
         
         return response()->json(compact('vrste'), 200);
     }
