@@ -15,13 +15,12 @@ class Login
         if ($ean) {
             $ident = OperaterIdent::find($ean);
             
-            if ($ident) {                
+            if ($ident) {
                 if ($ident->operater) {
                     //@TODO: FIX THIS ASAP
                     if (version_compare(phpversion(), '7.1', '>')) {
                         return strtoupper(bin2hex($ident->operater->password));
-                    }
-                    else {
+                    } else {
                         return strtoupper(($ident->operater->password));
                     }
                 }
@@ -46,8 +45,7 @@ class Login
                 //@TODO: FIX THIS ASAP
                 if (version_compare(phpversion(), '7.1', '>')) {
                     return strtoupper(bin2hex($users->first()->password));
-                }
-                else {
+                } else {
                     return strtoupper(($users->first()->password));
                 }
             }

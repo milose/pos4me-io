@@ -29,8 +29,7 @@ class DokumentController extends Controller
         
         if ($ulazVrste->count() > 0) {
             foreach ($ulazVrste as $vrsta) {
-                
-                $count = $ulaz->filter(function($item) use ($vrsta) {
+                $count = $ulaz->filter(function ($item) use ($vrsta) {
                     return $item->dokument->id_vrsta == $vrsta->id_vrsta;
                 })->count();
                 
@@ -38,7 +37,7 @@ class DokumentController extends Controller
                     continue;
                 }
                 
-                $vrste[] = 
+                $vrste[] =
                     [
                         'id' => $vrsta->id_vrsta,
                         'skraceni' => $vrsta->skraceni,
@@ -52,7 +51,6 @@ class DokumentController extends Controller
         
         if ($izlazVrste->count() > 0) {
             foreach ($izlazVrste as $vrsta) {
-                
                 $count = $izlaz->filter(function ($item) use ($vrsta) {
                     return $item->dokument->id_vrsta == $vrsta->id_vrsta;
                 })->count();
@@ -61,7 +59,7 @@ class DokumentController extends Controller
                     continue;
                 }
                 
-                $vrste[] = 
+                $vrste[] =
                     [
                         'id' => $vrsta->id_vrsta,
                         'skraceni' => $vrsta->skraceni,
@@ -99,7 +97,7 @@ class DokumentController extends Controller
                             }
                         ])
                         ->get()
-                        ->each(function ($doc) use($ulaz, $izlaz) {
+                        ->each(function ($doc) use ($ulaz, $izlaz) {
                             $doc->tip = in_array($doc->vrsta->skraceni, $ulaz) ?
                                                     'U' : (in_array($doc->vrsta->skraceni, $izlaz) ?
                                                             'I' : null);
