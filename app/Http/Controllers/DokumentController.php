@@ -81,6 +81,7 @@ class DokumentController extends Controller
     {
         $vrsta = DokumentVrsta::find($id);
         
+        // @TODO: Remove this, 404 or something instead
         if (!$vrsta) {
             return response()->json(['dokumenti' => []], 200);
         }
@@ -88,22 +89,36 @@ class DokumentController extends Controller
         $ulaz = json_decode(env('DOC_ULAZ'));
         $izlaz = json_decode(env('DOC_IZLAZ'));
         
-        $dokumenti = DokumentVrsta::find($vrsta->id_vrsta)
-                        ->dokumenti()
-                        ->with('partner')
-                        ->with([
-                            'status' => function ($query) {
-                                $query->pda()->whereIn('vrijednost', ['S', 'D']);
-                            }
-                        ])
-                        ->get()
-                        ->each(function ($doc) use ($ulaz, $izlaz) {
-                            $doc->tip = in_array($doc->vrsta->skraceni, $ulaz) ?
-                                                    'U' : (in_array($doc->vrsta->skraceni, $izlaz) ?
-                                                            'I' : null);
-                        })
-                        ->filter->status
-                        ->flatten();
+        $dokumenti = DB::table('artikal_dokument')
+                    ->select('artikal_dokument.id_dokument', 'artikal_dokument.id_vrsta', 'broj', 'id_tip as tip', 'datum', 'partner.naziv as partner_naziv', 'skraceni')
+                    ->join('dokument_vrsta', 'dokument_vrsta.id_vrsta', '=', 'artikal_dokument.id_vrsta')
+                    ->join('partner', 'partner.id_partner', '=', 'artikal_dokument.id_partner')
+                    ->join('artikal_dokument_status', 'artikal_dokument_status.id_dokument', 'artikal_dokument.id_dokument')
+                    ->where('dokument_vrsta.id_vrsta', $id)
+                    ->where('artikal_dokument_status.vrsta', 'PDA')
+                    ->whereIn('artikal_dokument_status.vrijednost', ['S', 'D'])
+                    ->get()
+                    ->each(function ($doc) use ($ulaz, $izlaz) {
+                        $doc->tip = in_array($doc->skraceni, $ulaz) ?
+                                                'U' : (in_array($doc->skraceni, $izlaz) ?
+                                                        'I' : null);
+                    });
+        
+        // $dokumenti = $vrsta->dokumenti()
+        //                 ->with('partner')
+        //                 ->with([
+        //                     'status' => function ($query) {
+        //                         $query->pda()->whereIn('vrijednost', ['S', 'D']);
+        //                     }
+        //                 ])
+        //                 ->get()
+        //                 ->each(function ($doc) use ($ulaz, $izlaz) {
+        //                     $doc->tip = in_array($doc->vrsta->skraceni, $ulaz) ?
+        //                                             'U' : (in_array($doc->vrsta->skraceni, $izlaz) ?
+        //                                                     'I' : null);
+        //                 })
+        //                 ->filter->status
+        //                 ->flatten();
         
         return response()->json(compact('dokumenti'), 200);
     }
